@@ -1,0 +1,163 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class ToDoListApp {
+
+    static class Task {
+        String description;
+        String priority;
+
+        public Task(String description, String priority) {
+            this.description = description;
+            this.priority = priority;
+        }
+
+        @Override
+        public String toString() {
+            return "Task: " + description + " | Priority: " + priority;
+        }
+    }
+
+    private static ArrayList<Task> tasks = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n1. Add Task");
+            System.out.println("2. View Tasks");
+            System.out.println("3. Remove Task");
+            System.out.println("4. Update Task");
+            System.out.println("5. Search Task");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline character after nextInt()
+
+            switch (choice) {
+                case 1:
+                    addTask(scanner);
+                    break;
+                case 2:
+                    viewTasks();
+                    break;
+                case 3:
+                    removeTask(scanner);
+                    break;
+                case 4:
+                    updateTask(scanner);
+                    break;
+                case 5:
+                    searchTask(scanner);
+                    break;
+                case 6:
+                    System.out.println("Exiting program...");
+                    break;
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        } while (choice != 6);
+
+        scanner.close();
+    }
+
+    // Method to add a new task
+    private static void addTask(Scanner scanner) {
+        System.out.print("Enter task description: ");
+        String description = scanner.nextLine();
+        System.out.print("Enter task priority (High/Medium/Low): ");
+        String priority = scanner.nextLine();
+
+        Task task = new Task(description, priority);
+        tasks.add(task);
+        System.out.println("Task added successfully!");
+    }
+
+    // Method to view all tasks
+    private static void viewTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available.");
+        } else {
+            System.out.println("\nList of Tasks:");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println(i + 1 + ". " + tasks.get(i));
+            }
+        }
+    }
+
+    // Method to remove a task by index
+    private static void removeTask(Scanner scanner) {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available to remove.");
+            return;
+        }
+        
+        viewTasks(); // Show current tasks
+        System.out.print("Enter the task number to remove: ");
+        int taskNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (taskNumber >= 1 && taskNumber <= tasks.size()) {
+            tasks.remove(taskNumber - 1);
+            System.out.println("Task removed successfully!");
+        } else {
+            System.out.println("Invalid task number.");
+        }
+    }
+
+    // Method to update a task
+    private static void updateTask(Scanner scanner) {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available to update.");
+            return;
+        }
+
+        viewTasks(); // Show current tasks
+        System.out.print("Enter the task number to update: ");
+        int taskNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (taskNumber >= 1 && taskNumber <= tasks.size()) {
+            Task taskToUpdate = tasks.get(taskNumber - 1);
+            System.out.print("Enter new description (leave blank to keep current): ");
+            String newDescription = scanner.nextLine();
+            if (!newDescription.isEmpty()) {
+                taskToUpdate.description = newDescription;
+            }
+
+            System.out.print("Enter new priority (High/Medium/Low, leave blank to keep current): ");
+            String newPriority = scanner.nextLine();
+            if (!newPriority.isEmpty()) {
+                taskToUpdate.priority = newPriority;
+            }
+
+            System.out.println("Task updated successfully!");
+        } else {
+            System.out.println("Invalid task number.");
+        }
+    }
+
+    // Method to search for a task by description
+    private static void searchTask(Scanner scanner) {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available to search.");
+            return;
+        }
+
+        System.out.print("Enter task description to search: ");
+        String searchTerm = scanner.nextLine().toLowerCase();
+        boolean found = false;
+
+        for (Task task : tasks) {
+            if (task.description.toLowerCase().contains(searchTerm)) {
+                System.out.println(task);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No tasks found with that description.");
+        }
+    }
+}
