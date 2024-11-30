@@ -78,8 +78,11 @@ The user can search for tasks by entering a part of the description.
 6. Exit
 
 Enter your choice: 1
+
 Enter task description: Complete Java homework
+
 Enter task priority (High/Medium/Low): High
+
 Task added successfully!
 
 
